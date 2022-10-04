@@ -14,7 +14,7 @@ let yVelocity = null;
 
 const handleRun = (delta, speedScale) => {
   if (isJumping) {
-    dinoElement.src = '../imgs/dino-stationary.png';
+    dinoElement.src = './imgs/dino-stationary.png';
     return null;
   }
 
@@ -64,5 +64,5 @@ export const updateDino = (delta, speedScale) => {
 export const getDinoRect = () => dinoElement.getBoundingClientRect();
 
 export const setDinoLose = () => {
-  dinoElement.src = '../imgs/dino-lose.png';
+  dinoElement.src = './imgs/dino-lose.png';
 };
