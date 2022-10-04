@@ -20,7 +20,7 @@ const handleRun = (delta, speedScale) => {
 
   if (currentFrameTime >= FRAME_TIME) {
     dinoFrame = (dinoFrame + 1) % DINO_FRAME_COUNT;
-    dinoElement.src = `../imgs/dino-run-${dinoFrame}.png`;
+    dinoElement.src = `./imgs/dino-run-${dinoFrame}.png`;
     currentFrameTime -= FRAME_TIME;
   }
   currentFrameTime += delta * speedScale;
