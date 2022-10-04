@@ -3,8 +3,7 @@ import {
   incrementCustomProperty,
   setCustomProperty,
 } from './helpers/updateCustomProperty.js';
-
-const SPEED = 0.05;
+import { SPEED } from './constants/index.js';
 
 const groundElems = document.querySelectorAll('.ground');
 

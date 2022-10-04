@@ -1,15 +1,15 @@
 import { setupGround, updateGround } from './ground.js';
-import { setupDino, updateDino } from './dino.js';
+import { setupDino, updateDino, setDinoLose, getDinoRect } from './dino.js';
+import { getCactusRects, setupCactus, updateCactus } from './cactus.js';
+import { WORLD_HEIGHT, WORLD_WIDTH, SPEED_SCALE_INCREASE } from './constants/index.js';
 
 const worldElement = document.querySelector('.world');
 const scoreElement = document.querySelector('.score');
 const startScreen = document.querySelector('.start-screen');
 
-const WORLD_WIDTH = 100;
-const WORLD_HEIGHT = 30;
-const SPEED_SCALE_INCREASE = 0.00001;
-
-setupGround();
+let lastTime = null;
+let speedScale = 0;
+let score = null;
 
 const setPixelToWorldScale = () => {
   let worldToPixelScale = null;
@@ -23,9 +23,27 @@ const setPixelToWorldScale = () => {
   worldElement.style.height = `{WORLD_HEIGHT * worldToPixelScale}px`;
 };
 
-let lastTime = null;
-let speedScale = 0;
-let score = null;
+const checkLose = () => {
+  const dinoRect = getDinoRect();
+  return getCactusRects().some((rect) => isCollision(rect, dinoRect));
+};
+
+const handleLose = () => {
+  setDinoLose();
+  setTimeout(() => {
+    document.addEventListener('keydown', handleStart, { once: true });
+    startScreen.classList.remove('hide');
+  }, 100);
+};
+
+const isCollision = (rect1, rect2) => {
+  return (
+    rect1.left < rect2.right &&
+    rect1.top < rect2.bottom &&
+    rect1.right > rect2.left &&
+    rect1.bottom > rect2.top
+  );
+};
 
 const updateSpeedScale = (delta) => {
   speedScale += delta * SPEED_SCALE_INCREASE;
@@ -45,8 +63,11 @@ const update = (time) => {
   const delta = time - lastTime;
   updateGround(delta, speedScale);
   updateDino(delta, speedScale);
+  updateCactus(delta, speedScale);
   updateSpeedScale(delta);
   updateScore(delta);
+
+  if (checkLose()) return handleLose();
 
   lastTime = time;
   window.requestAnimationFrame(update);
@@ -58,10 +79,10 @@ const handleStart = () => {
   score = 0;
   setupGround();
   setupDino();
+  setupCactus();
   startScreen.classList.add('hide');
   window.requestAnimationFrame(update);
 };
 
-setPixelToWorldScale();
 window.addEventListener('resize', setPixelToWorldScale);
 window.addEventListener('keydown', handleStart, { once: true });

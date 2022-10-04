@@ -3,13 +3,9 @@ import {
   incrementCustomProperty,
   setCustomProperty,
 } from './helpers/updateCustomProperty.js';
+import { JUMP_SPEED, GRAVITY, DINO_FRAME_COUNT, FRAME_TIME } from './constants/index.js';
 
 const dinoElement = document.querySelector('.dino');
-
-const JUMP_SPEED = 0.45;
-const GRAVITY = 0.0015;
-const DINO_FRAME_COUNT = 2;
-const FRAME_TIME = 100;
 
 let isJumping = null;
 let dinoFrame = null;
@@ -54,7 +50,7 @@ export const setupDino = () => {
   isJumping = false;
   dinoFrame = 0;
   currentFrameTime = 0;
-  yVelocity = 0
+  yVelocity = 0;
   setCustomProperty(dinoElement, '--bottom', 0);
   window.removeEventListener('keydown', onJump);
   window.addEventListener('keydown', onJump);
@@ -63,4 +59,10 @@ export const setupDino = () => {
 export const updateDino = (delta, speedScale) => {
   handleRun(delta, speedScale);
   handleJump(delta);
+};
+
+export const getDinoRect = () => dinoElement.getBoundingClientRect();
+
+export const setDinoLose = () => {
+  dinoElement.src = '../imgs/dino-lose.png';
 };
